@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Unit converter</string>
+    <string name="grams">grams</string>
+    <string name="to">to</string>
+    <string name="cups">cups</string>
+    <string name="ounces">ounces</string>
+</resources>
