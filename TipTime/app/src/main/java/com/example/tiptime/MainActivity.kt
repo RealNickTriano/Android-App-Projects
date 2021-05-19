@@ -9,7 +9,7 @@ import kotlin.math.ceil
 class MainActivity : AppCompatActivity() {
     // Declares top-level variable in class for binding object
     // lateinit keyword initializes variable before use
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         binding.calculateButton.setOnClickListener{ calculateTip()}
     }
 
-    fun calculateTip()
+    private fun calculateTip()
     {
         val stringOfCost = binding.costOfService.text.toString()
         val serviceCost = stringOfCost.toDoubleOrNull()
