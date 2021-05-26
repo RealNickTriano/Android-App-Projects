@@ -35,6 +35,7 @@
     <string name="flavor">Flavor</string>
     <string name="pickup_date">Pickup date</string>
     <string name="subtotal_price">Subtotal %s</string>
+    <string name="option_fee">%s (Additional Fee: $3.00)</string>
     <string name="total_price">Total %s</string>
     <string name="new_cupcake_order">New Cupcake Order</string>
     <string name="order_details">Quantity: %1$s cupcakes \n Flavor: %2$s \nPickup date: %3$s \n
