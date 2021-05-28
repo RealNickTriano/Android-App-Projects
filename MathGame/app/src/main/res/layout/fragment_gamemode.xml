@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".FlavorFragment">
+
+    <data>
+        <variable
+            name="flavorFragment"
+            type="com.example.mathgame.GameModeFragment" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/side_margin">
+
+            <TextView
+                android:id="@+id/choose_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Choose Mode"
+                android:textSize="34sp" />
+
+            <Button
+                android:id="@+id/addition_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Addition"
+                android:minWidth="@dimen/min_button_width"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/subtraction_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subtraction"
+                android:minWidth="@dimen/min_button_width"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/multiplication_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Multiplication"
+                android:minWidth="@dimen/min_button_width"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/division_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Division"
+                android:minWidth="@dimen/min_button_width"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/mixed_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mixed"
+                android:minWidth="@dimen/min_button_width"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/prime_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prime Numbers"
+                android:minWidth="@dimen/min_button_width"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>
