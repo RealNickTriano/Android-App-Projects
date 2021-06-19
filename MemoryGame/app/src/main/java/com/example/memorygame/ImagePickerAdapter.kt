@@ -13,8 +13,13 @@ import kotlin.math.min
 class ImagePickerAdapter(
     private val context: Context,
     private val imageUris: List<Uri>,
-    private val boardSize: BoardSize
+    private val boardSize: BoardSize,
+    private val imageClickListener: ImageClickListener
     ) : RecyclerView.Adapter<ImagePickerAdapter.ViewHolder>() {
+
+    interface ImageClickListener {
+        fun onPlaceHolderClicked()
+    }
 
 
 
@@ -45,13 +50,14 @@ class ImagePickerAdapter(
 
         fun bind(uri: Uri) {
             ivCustomImage.setImageURI(uri)
-            ivCustomImage.setOnClickListener(null)
+            ivCustomImage.setOnClickListener(null) // makes the image unable to be changed once selected
 
         }
 
         fun bind() {
             ivCustomImage.setOnClickListener {
                 // Launch intent for user to select photos
+                imageClickListener.onPlaceHolderClicked()
             }
         }
 
