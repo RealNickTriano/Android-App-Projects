@@ -3,8 +3,15 @@ package com.example.memorygame
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
@@ -14,9 +21,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memorygame.models.BoardSize
+import com.example.memorygame.utils.BitmapScaler
 import com.example.memorygame.utils.EXTRA_BOARD_SIZE
 import com.example.memorygame.utils.isPermissionGranted
 import com.example.memorygame.utils.requestPermission
+import java.io.ByteArrayOutputStream
 
 class CreateActivity : AppCompatActivity() {
 
@@ -25,6 +34,8 @@ class CreateActivity : AppCompatActivity() {
         private const val PICK_PHOTOS_CODE = 655
         private const val READ_EXTERNAL_CODE = 248
         private const val READ_PHOTOS_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
+        private const val MIN_GAME_NAME_LENGTH = 3
+        private const val MAX_GAME_NAME_LENGTH = 14
     }
     private lateinit var  rvImagePicker: RecyclerView
     private lateinit var etGameName: EditText
@@ -48,6 +59,20 @@ class CreateActivity : AppCompatActivity() {
         numImagesRequired = boardSize.getNumPairs()
         supportActionBar?.title = "Choose pics (0 / $numImagesRequired)"
 
+        btnSave.setOnClickListener {
+            saveDataToFirebase()
+        }
+        etGameName.filters = arrayOf(InputFilter.LengthFilter(MAX_GAME_NAME_LENGTH))
+        etGameName.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                btnSave.isEnabled = shouldEnableSaveButton()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        }
         adapter = ImagePickerAdapter(this, chosenImageUris, boardSize, object: ImagePickerAdapter.ImageClickListener{
             override fun onPlaceHolderClicked() {
                 if (isPermissionGranted(this@CreateActivity, READ_PHOTOS_PERMISSION )) {
@@ -63,6 +88,8 @@ class CreateActivity : AppCompatActivity() {
         rvImagePicker.setHasFixedSize(true)
         rvImagePicker.layoutManager = GridLayoutManager(this, boardSize.getWidth())
     }
+
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -115,8 +142,36 @@ class CreateActivity : AppCompatActivity() {
         btnSave.isEnabled = shouldEnableSaveButton()
     }
 
+    private fun saveDataToFirebase() {
+        Log.i(TAG, "saveDataToFirebase")
+        for ((index, photoUri) in chosenImageUris.withIndex()) {
+            val imageByteArray = getImageByteArray(photoUri)
+        }
+    }
+
+    private fun getImageByteArray(photoUri: Uri): ByteArray {
+        val originalBitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val source = ImageDecoder.createSource(contentResolver, photoUri)
+            ImageDecoder.decodeBitmap(source)
+        } else {
+            MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
+        }
+        Log.i(TAG, "Original width ${originalBitmap.width} and height ${originalBitmap.height}")
+        val scaledBitmap = BitmapScaler.scaleToFitHeight(originalBitmap, 250)
+        Log.i(TAG, "Scaled width ${originalBitmap.width} and height ${originalBitmap.height}")
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
+    }
+
     private fun shouldEnableSaveButton(): Boolean {
         // Check if we should enable the save button
+        if (chosenImageUris.size != numImagesRequired) {
+            return false
+        }
+        if ( etGameName.text.isBlank() || etGameName.text.length < MIN_GAME_NAME_LENGTH) {
+            return false
+        }
         return true
     }
 
